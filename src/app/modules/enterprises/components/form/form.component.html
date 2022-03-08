@@ -1,0 +1,42 @@
+<div class="ciudad-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragBoundary="body">
+  <h2 cdkDragHandle mat-dialog-title>
+        <div class="row fila-titulo">
+          <div class="col-md-12">
+            <div class="div-titulo"><span class="titulo">Creación de Empresas</span>
+              <button (click)="close()" type="button" class="btn btn-outline-danger btn-cerrar">
+                <span class="material-icons icono-cerrar">
+                  close
+                </span>
+              </button></div>
+          </div>
+        </div>
+    </h2>
+
+    <mat-dialog-content class="mat-typography">
+      <div class="row pb-2">
+        <div class="col-md-12">
+          <form #formRef="ngForm" [formGroup]="formGroup" (ngSubmit)="createItem()">
+            <div class="col-md-12">
+              <div class="form-group">
+                  <label>Título <span class="text-danger">*</span></label>
+                  <input formControlName="titulo" name="titulo" required type="text" class="form-control form-control-sm">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                  <label>Contenido <span class="text-danger">*</span></label>
+                  <textarea formControlName="descripcion" name="descripcion" required rows="5" class="form-control form-control-sm"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <span class="example-fill-remaining-space"></span>
+        <button type="button" class="btn btn-outline-danger btn-cancelar" (click)="close()">CANCELAR</button>
+        <button type="button" class="btn btn-outline-primary" (click)="formRef.ngSubmit.emit()">GUARDAR</button>
+    </mat-dialog-actions>
+  </div>

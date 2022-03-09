@@ -1,1 +1,98 @@
-<p>form works!</p>
+<div class="employees-modal" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragBoundary="body">
+  <h2 cdkDragHandle mat-dialog-title>
+      <button (click)="close()" class="close" mat-icon-button>
+          <mat-icon>close</mat-icon>
+      </button>
+      <div *ngIf="data.tipo == ACCIONES_ITEM.CREAR.nombre"> <span class="titulo">Creación Empleado</span></div>
+      <div *ngIf="data.tipo == ACCIONES_ITEM.EDITAR.nombre"> <span class="titulo">Edición Empleado</span></div>
+      <div *ngIf="data.tipo == ACCIONES_ITEM.VER.nombre"> <span class="titulo">Visualización Empleado</span></div>
+  </h2>
+
+  <mat-dialog-content class="mat-typography">
+      <form #formRef="ngForm" [formGroup]="formGroup" (ngSubmit)="createItem()">
+          <div class="row">
+              <div class="col-md-{{tamDivNombre}}">
+                  <mat-form-field>
+                      <mat-label>Responsable Creación</mat-label>
+                      <input formControlName="CreatedBy" name="CreatedBy" matInput type="text" cdkFocusInitial required>
+                  </mat-form-field>
+              </div>
+              <div class="col-md-{{tamDivStatus}} text-right" *ngIf="data.tipo != ACCIONES_ITEM.CREAR.nombre">
+                  <mat-slide-toggle class="mt-2" name="Status" formControlName="Status">
+                      {{ (formGroup.value.Status != undefined && formGroup.value.Status != null) ? (formGroup.value.Status == true ? 'Activo' : 'Inactivo') : (object?.Status == true ? 'Activo' : 'Inactivo')}}
+                  </mat-slide-toggle>
+              </div>
+              <div class="col-md-12" *ngIf="data.tipo != ACCIONES_ITEM.CREAR.nombre">
+                  <mat-form-field>
+                      <mat-label>Responsable Edición</mat-label>
+                      <input formControlName="ModifiedBy" name="ModifiedBy" matInput type="text" cdkFocusInitial required>
+                  </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Nombre</mat-label>
+                    <input formControlName="Name" name="Name" matInput type="text" cdkFocusInitial required>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Apellido</mat-label>
+                    <input formControlName="Surname" name="Surname" matInput type="text" cdkFocusInitial required>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Correo</mat-label>
+                    <input formControlName="Email" name="Email" matInput type="text" cdkFocusInitial>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Cargo</mat-label>
+                    <input formControlName="Position" name="Position" matInput type="text" cdkFocusInitial required>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Edad</mat-label>
+                    <input formControlName="Age" name="Age" matInput type="text" cdkFocusInitial required maxlength="2" appMaskIntegerPositivo>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Empresa</mat-label>
+                    <mat-select (selectionChange)="getDepartments()" formControlName="IdEnterprise" name="IdEnterprise" required>
+                        <mat-option *ngFor="let empresa of metadatos?.enterpriseList" [value]="empresa.Id">
+                            {{ empresa.Name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                  <mat-label>Departamento</mat-label>
+                  <mat-select formControlName="IdDepartment" name="IdDepartment" required>
+                    <mat-option *ngIf="data.tipo != ACCIONES_ITEM.CREAR.nombre" [value]="-1">Ninguno</mat-option>
+                      <mat-option *ngFor="let dep of this.departments" [value]="dep.Id">
+                          {{ dep.Name }}
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </div>
+          </div>
+      </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+      <span class="example-fill-remaining-space"></span>
+      <button mat-raised-button (click)="close()">CANCELAR</button>
+      <button mat-raised-button *ngIf="data.tipo != ACCIONES_ITEM.VER.nombre" (click)="formRef.ngSubmit.emit()" color="warn">GUARDAR</button>
+      <button mat-raised-button *ngIf="data.tipo == ACCIONES_ITEM.VER.nombre" (click)="changeToEdit()" color="warn">EDITAR</button>
+  </mat-dialog-actions>
+</div>

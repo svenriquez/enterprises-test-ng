@@ -1,4 +1,94 @@
 <app-layout>
-  <p>index departments works!</p>
-</app-layout>
+  <div class="row m-0">
+    <div class="col-md-12 lbl-titulo">
+      <span>GESTIÓN EMPLEADOS</span>
+    </div>
+  </div>
 
+  <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav-content>
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-md-6">
+                      <button (click)="createItem()" mat-raised-button color="primary">
+                  <span class="material-icons">
+                    add_circle_outline
+                  </span>
+                  Adicionar
+                </button>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="pt-3 d-md-none"></div>
+                      <mat-form-field>
+                          <input matInput [(ngModel)]="filterValue" (keyup.enter)="applyFilter()" placeholder="Filtrar">
+                      </mat-form-field>
+                  </div>
+              </div>
+          </div>
+
+          <ng-content></ng-content>
+      </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-12">
+              <div class="mat-elevation-z8 table-index">
+                  <table mat-table [dataSource]="dataSource" matSort class="list-item">
+                      <ng-container matColumnDef="Name">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                          <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="Phone">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Teléfono </th>
+                          <td mat-cell *matCellDef="let element"> {{element.Phone}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="Description">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                          <td mat-cell *matCellDef="let element"> {{element.Description}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="Enterprise">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Empresa </th>
+                        <td mat-cell *matCellDef="let element"> {{element.IdEnterpriseNavigation.Name}} </td>
+                    </ng-container>
+
+                      <ng-container matColumnDef="Status">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                          <td mat-cell *matCellDef="let element"> {{ element.Status == true ? 'Activo' : 'Inactivo' }} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="CreatedBy">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Creado Por </th>
+                          <td mat-cell *matCellDef="let element"> {{element.CreatedBy}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="CreatedDate">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Creación </th>
+                          <td mat-cell *matCellDef="let element"> {{element.CreatedDate | date: 'yyyy-MM-dd HH:mm:ss'}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="ModifiedBy">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Modificado Por </th>
+                          <td mat-cell *matCellDef="let element"> {{element.ModifiedBy}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="ModifiedDate">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Modificación </th>
+                          <td mat-cell *matCellDef="let element"> {{element.ModifiedDate | date: 'yyyy-MM-dd HH:mm:ss'}} </td>
+                      </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showItem(row)"></tr>
+                  </table>
+
+                  <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex" [showFirstLastButtons]="true" (page)="changePage($event)">
+                  </mat-paginator>
+              </div>
+              <br /><br />
+          </div>
+      </div>
+  </div>
+</app-layout>

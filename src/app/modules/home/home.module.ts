@@ -15,13 +15,17 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
+import { MaskIntegerPositivoDirective } from 'src/app/directives/mask-integer-positivo.directive';
 
 @NgModule({
   declarations: [
     LayoutComponent,
     HeaderComponent,
     FooterComponent,
-    SidebarComponent
+    SidebarComponent,
+    MaskIntegerPositivoDirective
   ],
   imports: [
     CommonModule,
@@ -36,7 +40,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatPaginatorModule,
     MatButtonModule,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSlideToggleModule,
+    MatSelectModule
   ],
   exports: [
     LayoutComponent,
@@ -51,7 +57,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatPaginatorModule,
     MatButtonModule,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSlideToggleModule,
+    MatSelectModule,
+    MaskIntegerPositivoDirective
   ]
 })
 

@@ -3,32 +3,57 @@
         <button (click)="close()" class="close" mat-icon-button>
             <mat-icon>close</mat-icon>
         </button>
-        <div><i class="fa fa-plus fa-2x"></i> <span class="titulo">Creación de Empresa</span></div>
+        <div *ngIf="data.tipo == ACCIONES_ITEM.CREAR.nombre"> <span class="titulo">Creación de Empresa</span></div>
+        <div *ngIf="data.tipo == ACCIONES_ITEM.EDITAR.nombre"> <span class="titulo">Edición de Empresa</span></div>
+        <div *ngIf="data.tipo == ACCIONES_ITEM.VER.nombre"> <span class="titulo">Visualización de Empresa</span></div>
     </h2>
 
     <mat-dialog-content class="mat-typography">
-      <form #formRef="ngForm" [formGroup]="formGroup" (ngSubmit)="createItem()">
-        <div class="row">
-          <div class="col-md-12">
-            <mat-form-field>
-              <mat-label>Nombre</mat-label>
-              <input formControlName="titulo" name="titulo" matInput type="text" cdkFocusInitial required>
-          </mat-form-field>
-          </div>
-          <div class="col-md-12">
-            <mat-form-field>
-              <mat-label>Nombre</mat-label>
-              <input formControlName="descripcion" name="descripcion" matInput type="text" cdkFocusInitial required>
-          </mat-form-field>
-          </div>
-        </div>
-      </form>
+        <form #formRef="ngForm" [formGroup]="formGroup" (ngSubmit)="createItem()">
+            <div class="row">
+                <div class="col-md-{{tamDivNombre}}">
+                    <mat-form-field>
+                        <mat-label>Responsable Creación</mat-label>
+                        <input formControlName="CreatedBy" name="CreatedBy" matInput type="text" cdkFocusInitial required>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-{{tamDivStatus}} text-right" *ngIf="data.tipo != ACCIONES_ITEM.CREAR.nombre">
+                    <mat-slide-toggle class="mt-2" name="Status" formControlName="Status">
+                        {{ (formGroup.value.Status != undefined && formGroup.value.Status != null) ? (formGroup.value.Status == true ? 'Activo' : 'Inactivo') : (object?.Status == true ? 'Activo' : 'Inactivo')}}
+                    </mat-slide-toggle>
+                </div>
+                <div class="col-md-12" *ngIf="data.tipo != ACCIONES_ITEM.CREAR.nombre">
+                    <mat-form-field>
+                        <mat-label>Responsable Edición</mat-label>
+                        <input formControlName="ModifiedBy" name="ModifiedBy" matInput type="text" cdkFocusInitial>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Nombre Empresa</mat-label>
+                        <input formControlName="Name" name="Name" matInput type="text" cdkFocusInitial required>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Teléfono</mat-label>
+                        <input formControlName="Phone" name="Phone" matInput type="text" cdkFocusInitial maxlength="10" appMaskIntegerPositivo>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Dirección</mat-label>
+                        <input formControlName="Address" name="Address" matInput type="text" cdkFocusInitial>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
     </mat-dialog-content>
 
     <mat-dialog-actions>
         <span class="example-fill-remaining-space"></span>
         <button mat-raised-button (click)="close()">CANCELAR</button>
-        <button mat-raised-button (click)="formRef.ngSubmit.emit()" color="warn">GUARDAR</button>
-        <button  mat-raised-button (click)="changeToEdit()" color="warn">EDITAR</button>
+        <button mat-raised-button *ngIf="data.tipo != ACCIONES_ITEM.VER.nombre" (click)="formRef.ngSubmit.emit()" color="warn">GUARDAR</button>
+        <button mat-raised-button *ngIf="data.tipo == ACCIONES_ITEM.VER.nombre" (click)="changeToEdit()" color="warn">EDITAR</button>
     </mat-dialog-actions>
 </div>

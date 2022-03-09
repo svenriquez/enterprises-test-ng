@@ -11,10 +11,11 @@ export class HttpService {
   ) {
   }
 
-  getItems(module: string, size: string, pageNumber: string) {
+  getItems(module: string, size: number, pageNumber: number, textFilter: string) {
     let params = new HttpParams();
-    params = (size != undefined && size != null) ? params.append('size', size) : params;
-    params = (pageNumber != undefined && pageNumber != null) ? params.append('pageNumber', pageNumber) : params;
+    params = (size != undefined && size != null) ? params.append('size', size + '') : params;
+    params = (pageNumber != undefined && pageNumber != null) ? params.append('pageNumber', pageNumber + '') : params;
+    params = (textFilter != undefined && textFilter != null) ? params.append('textFilter', textFilter) : params;
 
     return this.httpClient.get(`/${module}/get-all/`, { params });
   }
@@ -28,15 +29,15 @@ export class HttpService {
   }
 
   getItem(id: any, module: any) {
-    return this.httpClient.get(`/${module}/${id}`);
+    return this.httpClient.get(`/${module}/get-by-id/${id}`);
   }
 
   postItem(object: any, module: any) {
-    return this.httpClient.post(`/${module}`, object);
+    return this.httpClient.post(`/${module}/post`, object);
   }
 
-  putItem(id:any, object: any, module: any) {
-    return this.httpClient.put(`/${module}?id=${id}`, object);
+  putItem(object: any, module: any) {
+    return this.httpClient.put(`/${module}/update`, object);
   }
 
   deleteItems(module: string, ids: any[]) {
@@ -49,6 +50,10 @@ export class HttpService {
     };
 
     return this.httpClient.delete(`/${module}`, options);
+  }
+
+  getDepartmentsByIdEnterprise(id: any, module: any) {
+    return this.httpClient.get(`/${module}/get-departments-by-idEnterprise/${id}`);
   }
 
 }

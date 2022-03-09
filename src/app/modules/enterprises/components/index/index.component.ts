@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpService } from 'src/app/services/http.service';
 import { FormComponent } from '../form/form.component';
+import { SIZE_MODAL, ACCIONES_ITEM } from 'src/app/config/config';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-index',
@@ -13,13 +15,11 @@ export class IndexComponent implements OnInit {
 
   filterValue = '';
   itemList: Array<any> = [];
-  page = "0";
-  totalRegistros = 0;
-  itemsPorPagina = "10";
+  pageEvent: PageEvent = new PageEvent();
 
-  length = undefined;
-  pageSize = undefined;
-  pageIndex = undefined;
+  length = 0;
+  pageSize = 5;
+  pageIndex = 0;
   pageSizeOptions: number[] = [1, 5, 10, 25, 100];
 
   displayedColumns: string[] = [];
@@ -36,17 +36,12 @@ export class IndexComponent implements OnInit {
   }
 
   applyFilter() {
-    if (this.filterValue && this.filterValue.trim()) {
-    } else {
-    }
+    this.getItems();
   }
 
   getItems() {
-    this.page = "0";
-    this.service.getItems('enterprise', this.itemsPorPagina, this.page).subscribe((data: any) => {
+    this.service.getItems('enterprise', this.pageSize, this.pageIndex, this.filterValue).subscribe((data: any) => {
       this.dataSource.data = data.elements;
-      console.log("this.dataSource.data: ", this.dataSource.data);
-
       this.length = data.total;
     });
   }
@@ -57,9 +52,9 @@ export class IndexComponent implements OnInit {
       autoFocus: true,
       closeOnNavigation: false,
       position: { top: '30px' },
-      width: '700px',
+      width: SIZE_MODAL.MD,
       data: {
-        tipo: "creacion"
+        tipo: ACCIONES_ITEM.CREAR.nombre
       }
     });
 
@@ -68,16 +63,29 @@ export class IndexComponent implements OnInit {
     });
   }
 
-  deleteItems() {
+  showItem(item: any) {
+    const dialogRef = this.dialog.open(FormComponent, {
+      disableClose: true,
+      autoFocus: true,
+      closeOnNavigation: false,
+      position: { top: '30px' },
+      width: SIZE_MODAL.MD,
+      data: {
+        tipo: ACCIONES_ITEM.VER.nombre,
+        id: item.Id
+      }
+    });
 
-  }
-
-  showItem(row: any) {
-
+    dialogRef.afterClosed().subscribe(result => {
+      this.getItems();
+    });
   }
 
   changePage($event: any) {
-
+    this.pageEvent = $event;
+    this.pageSize = this.pageEvent.pageSize;
+    this.pageIndex = this.pageEvent.pageIndex;
+    this.getItems();
   }
 
 }
